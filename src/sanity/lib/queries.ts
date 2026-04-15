@@ -18,7 +18,7 @@ export const siteSettingsQuery = groq`
 
 // ── Projects ──
 export const allProjectsQuery = groq`
-  *[_type == "project" && status == "published"] | order(order asc) {
+  *[_type == "project"] | order(order asc) {
     _id,
     title,
     slug,
@@ -56,11 +56,9 @@ export const projectBySlugQuery = groq`
     duration,
     techStack,
     body,
-    artifacts[] {
+    "realArtifacts": *[_type == "artifact" && relatedProject._ref == ^._id] {
       title,
-      image,
-      caption,
-      downloadUrl
+      "fileUrl": downloadUrl.asset->url
     },
     phases[] {
       phaseName,

@@ -1,5 +1,6 @@
 import { client } from "@/sanity/lib/client";
-import { Award, Star, Trophy, Target, ShieldCheck } from "lucide-react";
+import { urlFor } from "@/sanity/lib/client";
+import { Award, Star, Trophy, Target, ShieldCheck, ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -16,7 +17,16 @@ const categoryIcons: Record<string, any> = {
 };
 
 async function getAchievements() {
-  const query = `*[_type == "achievement"] | order(date desc)`;
+  const query = `*[_type == "achievement"] | order(date desc) {
+    _id,
+    name,
+    organization,
+    date,
+    category,
+    description,
+    image,
+    link
+  }`;
   if (!client) {
     console.warn("Sanity client not configured. Using fallback data.");
     return [];
@@ -82,14 +92,18 @@ export default async function AchievementsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {achievements.map((achievement: any, idx: number) => {
             const Icon = categoryIcons[achievement.category] || Star;
+            const certificateUrl = achievement.image
+              ? urlFor(achievement.image).auto("format").fit("max").url()
+              : achievement.link || null;
+
             return (
               <div
                 key={achievement._id}
-                className="bg-white border-2 border-[var(--color-border)] p-8 shadow-[var(--shadow-default)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all duration-200 animate-fade-in-up"
-                style={{ animationDelay: `${idx * 0.1}s` }}
+                className="bg-white border-2 border-[var(--color-border)] p-8 shadow-[var(--shadow-default)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all duration-200 animate-fade-in-up flex flex-col"
+                style={{ animationDelay: `${idx * 0.1}s`, minHeight: "420px" }}
               >
                 {/* Meta Header */}
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center justify-between mb-6">
                   <div className="text-[10px] font-black uppercase tracking-widest text-[#888]">
                     Record_ID::{idx + 1}
                   </div>
@@ -98,24 +112,40 @@ export default async function AchievementsPage() {
                   </div>
                 </div>
 
-                {/* Content */}
-                <div className="mb-10">
-                  <div className="w-12 h-12 bg-[#f4f4f0] border-2 border-[var(--color-border)] flex items-center justify-center text-[var(--color-accent)] mb-6 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+                {/* Content — fixed height with overflow control */}
+                <div className="flex-1 flex flex-col">
+                  <div className="w-12 h-12 bg-[#f4f4f0] border-2 border-[var(--color-border)] flex items-center justify-center text-[var(--color-accent)] mb-4 shadow-[2px_2px_0px_rgba(0,0,0,1)] shrink-0">
                     <Icon size={24} />
                   </div>
-                  <h2 className="text-2xl font-black uppercase tracking-tight mb-3 leading-none">
+                  <h2 className="text-xl font-black uppercase tracking-tight mb-2 leading-tight line-clamp-3">
                     {achievement.name}
                   </h2>
-                  <div className="text-[10px] font-black uppercase tracking-widest text-[var(--color-accent)] opacity-80 mb-6">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-[var(--color-accent)] opacity-80 mb-4 shrink-0">
                     @{achievement.organization}
                   </div>
-                  <p className="text-xs font-bold text-[var(--color-muted)] uppercase leading-relaxed">
+                  <p className="text-xs font-bold text-[var(--color-muted)] uppercase leading-relaxed line-clamp-4 mb-6">
                     {achievement.description}
                   </p>
+
+                  {/* Spacer pushes footer to bottom */}
+                  <div className="flex-1" />
+
+                  {/* View Certificate Button */}
+                  {certificateUrl && (
+                    <a
+                      href={certificateUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-3 bg-[var(--color-accent)] text-white text-[9px] font-black uppercase tracking-widest border-2 border-[var(--color-border)] shadow-[var(--shadow-default)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all mb-6 self-start"
+                    >
+                      View_Certificate
+                      <ExternalLink size={12} />
+                    </a>
+                  )}
                 </div>
 
                 {/* Footer Tag */}
-                <div className="pt-6 border-t border-[var(--color-border)] border-dashed flex items-center justify-between">
+                <div className="pt-4 border-t border-[var(--color-border)] border-dashed flex items-center justify-between shrink-0">
                   <span className="text-[8px] font-black uppercase tracking-widest text-[#AAA]">Timestamp</span>
                   <span className="text-[10px] font-black uppercase tracking-wider text-[var(--color-primary)]">
                     {achievement.date ? new Date(achievement.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Verified'}

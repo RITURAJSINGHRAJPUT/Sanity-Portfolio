@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import StoryTimeline from "@/components/projects/StoryTimeline";
+import { safeFetch } from "@/sanity/lib/client";
+import { allProjectsQuery } from "@/sanity/lib/queries";
 
-// Placeholder data — will be replaced with Sanity queries
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+// Fallback data — used only when Sanity is empty or unconfigured
 const sampleProjects = [
   {
     _id: "1",
@@ -164,7 +169,10 @@ const allTags = [
   { value: "data", label: "Data" },
 ];
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const sanityProjects = await safeFetch<any>(allProjectsQuery);
+  const projects = sanityProjects.length > 0 ? sanityProjects : sampleProjects;
+
   return (
     <div className="relative overflow-hidden grid-bg min-h-screen">
       <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">
@@ -187,7 +195,7 @@ export default function ProjectsPage() {
             <span className="w-3 h-3 bg-[var(--color-accent)] shadow-[2px_2px_0px_rgba(0,0,0,1)]" />
             <h2 className="text-xl font-black uppercase tracking-widest text-[var(--color-primary)]">FEATURED_TIMELINE</h2>
           </div>
-          <StoryTimeline projects={sampleProjects} />
+          <StoryTimeline projects={projects} />
         </section>
 
         {/* Case Study Cards Grid */}
@@ -200,10 +208,10 @@ export default function ProjectsPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {sampleProjects.map((project, idx) => (
+            {projects.map((project: any, idx: number) => (
               <Link
                 key={project._id}
-                href={`/projects/${project.slug.current}`}
+                href={`/projects/${project.slug?.current || project.slug}`}
                 className="group relative bg-white border-2 border-[var(--color-border)] p-8 shadow-[var(--shadow-default)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all duration-200 animate-fade-in-up"
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
@@ -214,7 +222,7 @@ export default function ProjectsPage() {
 
                 <div className="mb-8">
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tags.slice(0, 2).map((tag) => (
+                    {(project.tags || []).slice(0, 2).map((tag: string) => (
                       <span
                         key={tag}
                         className="px-2 py-0.5 text-[9px] font-black uppercase tracking-tighter bg-[#f4f4f0] border border-[var(--color-border)] text-[var(--color-primary)]"

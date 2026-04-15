@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
+import { safeFetch } from "@/sanity/lib/client";
+import { allSkillsQuery } from "@/sanity/lib/queries";
 
 export const metadata: Metadata = {
   title: "Skills & Tools",
   description: "PM tools and skills across planning, collaboration, analytics, design, and development.",
 };
 
-const skillCategories = [
+// Fallback data used when Sanity is empty or unconfigured
+const fallbackSkillCategories = [
   {
     name: "Planning & Delivery",
-    icon: "📋",
     skills: [
       { name: "Jira", level: "Proficient" },
       { name: "Linear", level: "Working" },
@@ -19,7 +21,6 @@ const skillCategories = [
   },
   {
     name: "Collaboration",
-    icon: "🤝",
     skills: [
       { name: "Slack", level: "Proficient" },
       { name: "Miro", level: "Working" },
@@ -29,7 +30,6 @@ const skillCategories = [
   },
   {
     name: "Analytics & Data",
-    icon: "📊",
     skills: [
       { name: "Google Analytics 4", level: "Working" },
       { name: "Mixpanel", level: "Working" },
@@ -40,7 +40,6 @@ const skillCategories = [
   },
   {
     name: "Design Adjacency",
-    icon: "🎨",
     skills: [
       { name: "Figma", level: "Working" },
       { name: "Maze", level: "Familiar" },
@@ -49,7 +48,6 @@ const skillCategories = [
   },
   {
     name: "Dev Awareness",
-    icon: "💻",
     skills: [
       { name: "GitHub", level: "Working" },
       { name: "Postman", level: "Working" },
@@ -59,13 +57,38 @@ const skillCategories = [
   },
 ];
 
-const levelColors: Record<string, { bg: string; text: string }> = {
-  Familiar: { bg: "bg-yellow-50", text: "text-yellow-700" },
-  Working: { bg: "bg-blue-50", text: "text-blue-700" },
-  Proficient: { bg: "bg-green-50", text: "text-green-700" },
-};
+// Category display order
+const categoryOrder = [
+  "Planning & Delivery",
+  "Collaboration",
+  "Analytics & Data",
+  "Design Adjacency",
+  "Dev Awareness",
+];
 
-export default function SkillsPage() {
+function groupSkillsByCategory(skills: any[]) {
+  const grouped: Record<string, { name: string; level: string }[]> = {};
+  for (const skill of skills) {
+    const cat = skill.category || "Other";
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push({
+      name: skill.name,
+      level: skill.proficiencyLevel || "Familiar",
+    });
+  }
+  // Sort by the defined category order
+  return categoryOrder
+    .filter((cat) => grouped[cat])
+    .map((cat) => ({ name: cat, skills: grouped[cat] }));
+}
+
+export default async function SkillsPage() {
+  const sanitySkills = await safeFetch<any>(allSkillsQuery);
+  const skillCategories =
+    sanitySkills.length > 0
+      ? groupSkillsByCategory(sanitySkills)
+      : fallbackSkillCategories;
+
   return (
     <div className="relative overflow-hidden grid-bg min-h-screen">
       <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">

@@ -18,7 +18,7 @@ export const client = isConfigured
       projectId,
       dataset,
       apiVersion,
-      useCdn: true,
+      useCdn: false,
     })
   : null;
 
