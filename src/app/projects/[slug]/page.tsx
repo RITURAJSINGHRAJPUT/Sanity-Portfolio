@@ -17,12 +17,13 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const projects = await safeFetch<any>(projectBySlugQuery, { slug });
-  const project = projects;
-  if (project && typeof project === "object" && "title" in project) {
+  const project = await safeFetch<any>(projectBySlugQuery, { slug });
+  
+  const p = project as any;
+  if (p && typeof p === "object" && p.title) {
     return {
-      title: `${project.title} // PM_ARCHITECT`,
-      description: project.tldr || "In-depth delivery architecture and product strategy analysis.",
+      title: `${p.title} // PM_ARCHITECT`,
+      description: p.tldr || "In-depth delivery architecture and product strategy analysis.",
     };
   }
   return {
