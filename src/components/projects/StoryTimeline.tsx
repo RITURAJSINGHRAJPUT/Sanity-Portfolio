@@ -85,16 +85,16 @@ export default function StoryTimeline({ projects }: StoryTimelineProps) {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* ── Project Tabs ── */}
-      <div className="flex flex-wrap gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
         {projects.map((project, idx) => (
           <button
             key={project._id}
             onClick={() => handleTabSwitch(idx)}
             className={cn(
-              "px-6 py-3 text-xs font-black uppercase tracking-widest transition-all",
+              "w-full h-full flex items-center justify-center text-center px-4 py-3 text-[10px] lg:text-xs font-black uppercase tracking-widest transition-all border-2",
               idx === activeProjectIdx
-                ? "bg-[var(--color-primary)] text-white border-2 border-[var(--color-primary)]"
-                : "bg-white text-[var(--color-muted)] hover:text-[var(--color-primary)] border-2 border-[var(--color-border)]"
+                ? "bg-[var(--color-primary)] text-white border-[var(--color-primary)]"
+                : "bg-white text-[var(--color-muted)] hover:text-[var(--color-primary)] border-[var(--color-border)]"
             )}
           >
             {project.title}

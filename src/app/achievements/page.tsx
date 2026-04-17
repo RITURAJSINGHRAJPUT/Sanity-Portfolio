@@ -117,9 +117,9 @@ export default async function AchievementsPage() {
                   <div className="w-12 h-12 bg-[#f4f4f0] border-2 border-[var(--color-border)] flex items-center justify-center text-[var(--color-accent)] mb-4 shadow-[2px_2px_0px_rgba(0,0,0,1)] shrink-0">
                     <Icon size={24} />
                   </div>
-                  <h2 className="text-xl font-black uppercase tracking-tight mb-2 leading-tight line-clamp-3">
+                  <h3 className="text-lg font-black uppercase tracking-tight mb-2 leading-tight line-clamp-3 break-words">
                     {achievement.name}
-                  </h2>
+                  </h3>
                   <div className="text-[10px] font-black uppercase tracking-widest text-[var(--color-accent)] opacity-80 mb-4 shrink-0">
                     @{achievement.organization}
                   </div>
