@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   description: "Records of specialized milestones, honors, and professional delivery benchmarks.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const categoryIcons: Record<string, any> = {
   academic: Star,
   professional: Trophy,
