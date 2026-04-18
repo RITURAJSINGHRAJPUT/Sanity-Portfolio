@@ -37,17 +37,13 @@ export default function ResumePage() {
           </div>
         </div>
 
-        {/* PDF Embed placeholder */}
-        <div className="h-[600px] bg-[var(--color-surface)] rounded-[var(--radius-btn)] flex items-center justify-center border border-[var(--color-border)]">
-          <div className="text-center">
-            <FileText size={48} className="text-[var(--color-muted)] mx-auto mb-3" />
-            <p className="text-sm text-[var(--color-muted)]">
-              Resume PDF will be embedded here
-            </p>
-            <p className="text-xs text-[var(--color-muted)] mt-1">
-              Upload your resume.pdf to /public or manage via Sanity CMS
-            </p>
-          </div>
+        {/* PDF Embed */}
+        <div className="h-[600px] rounded-[var(--radius-btn)] border border-[var(--color-border)] overflow-hidden">
+          <iframe 
+            src="/resume.pdf#view=FitH&toolbar=0&navpanes=0" 
+            className="w-full h-full"
+            title="Resume"
+          />
         </div>
 
         {/* Download Button */}

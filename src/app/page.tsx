@@ -3,6 +3,11 @@ import Image from "next/image";
 import { ArrowRight, Download, Briefcase, BookOpen, Award, MessageSquare } from "lucide-react";
 import TypewriterText from "@/components/home/TypewriterText";
 import StatsTicker from "@/components/home/StatsTicker";
+import { safeFetch } from "@/sanity/lib/client";
+import { allProjectsQuery } from "@/sanity/lib/queries";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 // Placeholder data — will be replaced with Sanity data when connected
 const heroData = {
@@ -45,7 +50,10 @@ const featuredProjects = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const sanityProjects = await safeFetch<any>(allProjectsQuery);
+  const displayProjects = sanityProjects.length > 0 ? sanityProjects.slice(0, 3) : featuredProjects;
+
   return (
     <>
       {/* ── Hero Section ── */}
@@ -55,30 +63,35 @@ export default function HomePage() {
             {/* Left Content */}
             <div className="flex-1 max-w-2xl">
               <div className="inline-block px-3 py-1 bg-[#A88849] text-[8px] font-black uppercase tracking-[0.2em] text-white mb-6">
-                Established 2024
+                Computer Engineering Graduate | B.Tech | 8.48 CGPA
               </div>
               
               <h1 className="leading-[0.85] text-[var(--color-primary)]">
-                Strategic <br />
-                Architect & <br />
-                <span className="text-[var(--color-accent)]">Delivery <br /> Expert</span>
+                PROJECT MANAGER & <br />
+                TECH BUILDER
               </h1>
               
-              <div className="mt-10 flex gap-6 items-start">
-                <div className="w-[2px] h-16 bg-[var(--color-accent)]" />
-                <p className="text-lg md:text-xl font-bold text-[var(--color-primary)] max-w-sm leading-tight uppercase">
-                  Building high-performing teams and delivering 
-                  complex digital products with precision and care.
+              <div className="mt-10 flex gap-6 items-stretch">
+                <div className="w-[2px] bg-[var(--color-accent)]" />
+                <p className="text-lg md:text-xl font-bold text-[var(--color-primary)] max-w-lg leading-tight uppercase py-1">
+                  Building real-world products by combining project management, IoT systems, and full-stack development. Focused on turning ideas into scalable, efficient, and impactful solutions.
                 </p>
               </div>
 
-              <div className="mt-12 mb-20 md:mb-32">
+              <div className="mt-12 mb-20 md:mb-32 flex flex-wrap gap-4 md:gap-6">
                 <Link
                   href="/projects"
                   className="inline-flex items-center gap-4 px-8 py-4 bg-[var(--color-accent)] text-white text-xs font-black uppercase tracking-widest border-2 border-[var(--color-border)] shadow-[var(--shadow-default)] hover:shadow-none translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0 transition-all"
                 >
-                  See My Latest Projects
+                  View My Projects
                   <ArrowRight size={16} />
+                </Link>
+                <Link
+                  href="/resume"
+                  className="inline-flex items-center gap-4 px-8 py-4 bg-white text-[var(--color-primary)] text-xs font-black uppercase tracking-widest border-2 border-[var(--color-border)] shadow-[var(--shadow-default)] hover:shadow-none translate-x-[-4px] translate-y-[-4px] hover:translate-x-0 hover:translate-y-0 transition-all"
+                >
+                  Download Resume
+                  <Download size={16} />
                 </Link>
               </div>
             </div>
@@ -123,10 +136,11 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredProjects.map((project, idx) => (
-              <div
-                key={project.title}
-                className="bg-white border-2 border-[var(--color-border)] p-8 shadow-[var(--shadow-default)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all duration-200 group cursor-pointer"
+            {displayProjects.map((project: any, idx: number) => (
+              <Link
+                key={project._id || project.title}
+                href={`/projects/${project.slug?.current || "coming-soon"}`}
+                className="bg-white border-2 border-[var(--color-border)] p-8 shadow-[var(--shadow-default)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all duration-200 group cursor-pointer block"
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
                 {/* Monospace Label */}
@@ -135,19 +149,19 @@ export default function HomePage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-black uppercase tracking-tight text-[var(--color-primary)] mb-4 leading-none">
+                <h3 className="text-xl font-black uppercase tracking-tight text-[var(--color-primary)] mb-4 leading-none group-hover:text-[var(--color-accent)] transition-colors">
                   {project.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-xs font-bold text-[var(--color-muted)] leading-relaxed uppercase mb-8">
-                  {project.description}
+                <p className="text-xs font-bold text-[var(--color-muted)] leading-relaxed uppercase mb-8 line-clamp-3">
+                  {project.tldr || project.description}
                 </p>
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-8">
                   <span className="px-2 py-1 border border-[var(--color-border)] text-[8px] font-black uppercase tracking-[0.1em]">
-                    {project.tag}
+                    {(project.tags && project.tags.length > 0) ? project.tags[0] : (project.industry || project.tag)}
                   </span>
                   <span className="px-2 py-1 border border-[var(--color-border)] text-[8px] font-black uppercase tracking-[0.1em]">
                     {project.methodology}
@@ -159,7 +173,7 @@ export default function HomePage() {
                   Execute_Analysis
                   <ArrowRight size={14} />
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
@@ -193,12 +207,10 @@ export default function HomePage() {
               </div>
               <h3 className="text-2xl font-black uppercase mb-4 tracking-tight">Systemic Planning</h3>
               <p className="text-sm font-bold text-[var(--color-muted)] max-w-md leading-relaxed uppercase mb-8">
-                Mapping complex dependencies before the first line of code 
-                is written. I specialize in identifying bottlenecks in the critical 
-                path of large-scale infrastructure projects.
+                Planning and structuring projects by identifying dependencies, defining clear workflows, and minimizing bottlenecks before development begins.
               </p>
-              <div className="flex gap-2">
-                {["Agile", "Kanban", "JIRA_PRO"].map(tag => (
+              <div className="flex flex-wrap gap-2">
+                {["Agile", "Sprint Planning", "Jira", "Workflow Design"].map(tag => (
                   <span key={tag} className="px-2 py-1 bg-black text-[8px] font-black text-white uppercase tracking-widest">
                     {tag}
                   </span>
@@ -211,9 +223,14 @@ export default function HomePage() {
               <div className="w-12 h-12 flex items-center justify-center text-[var(--color-primary)]">
                 <MessageSquare size={32} />
               </div>
-              <h3 className="text-2xl font-black uppercase tracking-tight leading-none mt-16">
-                Team <br /> Orchestration
-              </h3>
+              <div>
+                <h3 className="text-2xl font-black uppercase tracking-tight leading-none mt-16 mb-4">
+                  Team <br /> Orchestration
+                </h3>
+                <p className="text-[10px] font-bold text-[var(--color-primary)] leading-relaxed uppercase opacity-80">
+                  Coordinating cross-functional teams to ensure smooth communication, efficient task execution, and timely project delivery.
+                </p>
+              </div>
             </div>
 
             {/* Box 3 - Data-Driven Governance (Teal) */}
@@ -221,9 +238,14 @@ export default function HomePage() {
               <div className="w-12 h-12 flex items-center justify-center">
                 <Award size={32} />
               </div>
-              <h3 className="text-2xl font-black uppercase tracking-tight leading-none mt-16">
-                Data-Driven <br /> Governance
-              </h3>
+              <div>
+                <h3 className="text-2xl font-black uppercase tracking-tight leading-none mt-16 mb-4">
+                  Data-Driven <br /> Governance
+                </h3>
+                <p className="text-[10px] font-bold text-white/80 leading-relaxed uppercase">
+                  Using data insights and performance tracking to monitor progress, improve decision-making, and optimize team productivity.
+                </p>
+              </div>
             </div>
 
             {/* Box 4 - Lifecycle Management */}
@@ -234,8 +256,7 @@ export default function HomePage() {
               <div>
                 <h3 className="text-xl font-black uppercase mb-3 tracking-tight">Lifecycle Management</h3>
                 <p className="text-xs font-bold text-[var(--color-muted)] leading-relaxed uppercase">
-                  From discovery to post-launch optimization, ensuring every milestone 
-                  translates to measurable business value and user satisfaction.
+                  Managing projects from requirement gathering to deployment, ensuring quality delivery and continuous improvement.
                 </p>
               </div>
             </div>

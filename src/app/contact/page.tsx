@@ -35,9 +35,9 @@ export default function ContactPage() {
           <div className="w-16 h-16 mx-auto bg-[#10B981] border-2 border-[#121212] flex items-center justify-center mb-8 shadow-[4px_4px_0px_rgba(0,0,0,1)]">
             <CheckCircle size={32} className="text-white" />
           </div>
-          <h1 className="text-3xl font-black uppercase tracking-tighter mb-4">
-            TRANSMISSION_ACKNOWLEDGED
-          </h1>
+          <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter mb-4">
+            TRANSMISSION_<br />ACKNOWLEDGED
+          </h3>
           <p className="text-xs font-bold uppercase tracking-wide text-[var(--color-muted)] mb-10 leading-relaxed">
             Your dispatch has been logged in the system. 
             Estimated response latency: 24-48 business hours.

@@ -183,3 +183,18 @@ export const resumeQuery = groq`
     lastUpdated
   }
 `;
+
+// ── Experience & Education ──
+export const allExperienceQuery = groq`
+  *[_type == "experience"] | order(startDate desc) {
+    _id,
+    title,
+    organization,
+    type,
+    startDate,
+    endDate,
+    isCurrent,
+    location,
+    description
+  }
+`;

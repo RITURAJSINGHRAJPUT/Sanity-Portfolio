@@ -7,6 +7,7 @@ import { artifact } from "./artifact";
 import { blogPost, blogCategory } from "./blogPost";
 import { testimonial } from "./testimonial";
 import { resume } from "./resume";
+import { experience } from "./experience";
 
 export const schemaTypes = [
   siteSettings,
@@ -15,6 +16,7 @@ export const schemaTypes = [
   certification,
   achievement,
   artifact,
+  experience,
   blogPost,
   blogCategory,
   testimonial,
