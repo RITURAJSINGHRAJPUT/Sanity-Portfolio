@@ -168,7 +168,7 @@ export default function ContactPage() {
                   </div>
                   <ExternalLink size={14} className="opacity-0 group-hover:opacity-100" />
                 </a>
-                <a href="https://linkedin.com/in/" className="group flex items-center justify-between p-4 border border-white/20 hover:border-white transition-all">
+                <a href="https://www.linkedin.com/in/riturajsinghrajput/" className="group flex items-center justify-between p-4 border border-white/20 hover:border-white transition-all">
                   <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-[#AAA] group-hover:text-white">
                     <Globe size={16} className="text-[var(--color-accent)]" /> 
                     LINKEDIN_STRATA

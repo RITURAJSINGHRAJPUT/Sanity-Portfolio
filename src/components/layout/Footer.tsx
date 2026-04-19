@@ -14,8 +14,8 @@ const footerLinks = [
 ];
 
 const socialLinks = [
-  { href: "https://linkedin.com/in/", icon: ExternalLink, label: "LinkedIn" },
-  { href: "https://github.com/", icon: Globe, label: "GitHub" },
+  { href: "https://www.linkedin.com/in/riturajsinghrajput/", icon: ExternalLink, label: "LinkedIn" },
+  { href: "https://github.com/RITURAJSINGHRAJPUT", icon: Globe, label: "GitHub" },
   { href: "mailto:hello@rituraj.dev", icon: Mail, label: "Email" },
   { href: "https://cal.com/", icon: Calendar, label: "Schedule a chat" },
 ];
