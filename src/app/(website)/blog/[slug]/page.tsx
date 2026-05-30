@@ -14,7 +14,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await safeFetch<any>(blogPostBySlugQuery, { slug });
+  const postResult = await safeFetch<any>(blogPostBySlugQuery, { slug });
+  const post: any = Array.isArray(postResult) ? postResult[0] : postResult;
   
   if (!post) return { title: "Post Not Found" };
 
@@ -26,7 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = await safeFetch<any>(blogPostBySlugQuery, { slug });
+  const postResult = await safeFetch<any>(blogPostBySlugQuery, { slug });
+  const post: any = Array.isArray(postResult) ? postResult[0] : postResult;
 
   if (!post) {
     notFound();
