@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Clock, Calendar, Share2, FileCode, Target, Users, Zap } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Calendar, Share2, FileCode, Target, Users, Zap, ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import { safeFetch } from "@/sanity/lib/client";
 import { projectBySlugQuery } from "@/sanity/lib/queries";
@@ -114,6 +114,20 @@ export default async function CaseStudyDetail({ params }: Props) {
               {data.tldr}
             </p>
           </div>
+
+          {data.liveUrl && (
+            <div className="mb-12">
+              <a 
+                href={data.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-4 py-3 px-8 bg-[#121212] text-white text-[11px] font-black uppercase tracking-[0.2em] shadow-[6px_6px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all"
+              >
+                ACCESS_LIVE_SYSTEM
+                <ExternalLink size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-[var(--color-secondary)]" />
+              </a>
+            </div>
+          )}
 
           <div className="flex flex-wrap items-center gap-10 text-[10px] font-black uppercase tracking-widest text-[#888]">
             <div className="flex items-center gap-2">

@@ -127,6 +127,7 @@ const components: PortableTextComponents = {
               src={imageUrl}
               alt={value.alt || "Project image"}
               fill
+              unoptimized
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 640px"
             />

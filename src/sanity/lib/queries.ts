@@ -24,6 +24,7 @@ export const allProjectsQuery = groq`
     slug,
     coverImage,
     tldr,
+    liveUrl,
     tags,
     methodology,
     industry,
@@ -50,6 +51,7 @@ export const projectBySlugQuery = groq`
     slug,
     coverImage,
     tldr,
+    liveUrl,
     tags,
     methodology,
     industry,
@@ -83,7 +85,10 @@ export const allBlogPostsQuery = groq`
     _id,
     title,
     slug,
-    coverImage,
+    "coverImage": coverImage {
+      "asset": asset->,
+      alt
+    },
     excerpt,
     category->{name, slug},
     tags,
@@ -98,7 +103,10 @@ export const blogPostBySlugQuery = groq`
     _id,
     title,
     slug,
-    coverImage,
+    "coverImage": coverImage {
+      "asset": asset->,
+      alt
+    },
     body,
     category->{name, slug},
     tags,
@@ -107,14 +115,20 @@ export const blogPostBySlugQuery = groq`
     featured,
     seoTitle,
     seoDescription,
-    ogImage,
+    "ogImage": ogImage {
+      "asset": asset->
+    },
     "headings": body[style in ["h2", "h3"]]{
       "text": children[0].text,
       "style": style,
       "key": _key
     },
     "relatedPosts": *[_type == "blogPost" && status == "published" && slug.current != $slug && category._ref == ^.category._ref][0..2] {
-      _id, title, slug, coverImage, excerpt, publishedAt, estimatedReadTime, category->{name}
+      _id, title, slug, 
+      "coverImage": coverImage {
+         "asset": asset->
+      }, 
+      excerpt, publishedAt, estimatedReadTime, category->{name}
     }
   }
 `;

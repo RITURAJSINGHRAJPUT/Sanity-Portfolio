@@ -194,15 +194,53 @@ In the Studio sidebar, click **"Certification"** → click **"+"** to add a new 
 
 ---
 
+## 📝 SECTION 5: Blogs
+
+In the Studio sidebar, you'll see **"Blog Post"** and **"Blog Category"**. It's best to create your Categories first before creating posts.
+
+### Part 1: Blog Categories
+Click **"Blog Category"** → **"+"**
+
+| Field | Type | What to Enter |
+|-------|------|---------------|
+| **Name** | Text | The category name (e.g., `Product Management`, `Engineering`, `Design`) |
+| **Slug** | Auto | Click **"Generate"** |
+| **Description** | Text | Brief description of what this category covers |
+
+### Part 2: Blog Posts
+Click **"Blog Post"** → **"+"**
+
+| # | Field | Type | What to Enter | Example |
+|---|-------|------|---------------|---------|
+| 1 | **Title** | Text | Meaningful and catchy title for your blog post | `The Future of Product Management` |
+| 2 | **Slug** | Auto | Click **"Generate"** | `the-future-of-product-management` |
+| 3 | **Cover Image** | Image | Main image for the article. Make sure to provide **Alt Text** | Upload image + Alt: `Abstract tech illustration` |
+| 4 | **Excerpt** | Text | Short summary (card preview) | `A brief look into how AI is changing...` |
+| 5 | **Category** | Reference| Select from the previously created Blog Categories | `Product Management` |
+| 6 | **Tags** | Tags | Type tags and press enter | `ai`, `pm`, `future` |
+| 7 | **Body** | Rich Text | Your content! Supports Text, Images, and Code Blocks | Use H2, H3, bolding, blockquotes |
+| 8 | **Estimated Read Time**| Number| Minutes it takes to read | `5` |
+| 9 | **Published At**| Date/Time| Set the publication date/time | Today's Date |
+| 10| **Featured Post?**| Toggle | Check if you want it pinned/featured | On / Off |
+| 11| **Status** | Dropdown | Status of the blog post | `published`, `draft`, or `scheduled` |
+| 12| **SEO Title** | Text | Up to 60 characters for search engines | `Future of PM | My Blog` |
+| 13| **SEO Description**| Text | Up to 160 chars for search results | `Discover how AI is revolutionizing product management.` |
+| 14| **OG Image** | Image | Custom image for social sharing (defaults to Cover) | Upload custom or leave blank |
+
+> [!TIP]
+> **Code Blocks:** The Rich Text Editor lets you add syntax-highlighted code blocks. You can specify the `Language`, write your `Code`, and even label it with a `Filename`.
+
+---
+
 ## ✅ After Entering Data: The Publishing Checklist
 
 After filling in each document:
 
 1. **Click the green "Publish" button** (bottom-right of the Studio editor) — drafts are NOT visible on the site
-2. For Projects, make sure **Status = `published`**
+2. For Projects and Blogs, make sure **Status = `published`**
 3. Verify your data appears on the site:
    - **Achievements**: Refresh [localhost:3000/achievements](http://localhost:3000/achievements) — should show your real data immediately
-   - **Projects & Skills**: These pages still use hardcoded data. **Tell me when you've entered your data** and I'll wire them up to Sanity
+   - **Projects & Skills**: Pages might still be disconnected depending on our current progress. **Tell me when you've entered your data** and I'll wire them up to Sanity
 
 ---
 
@@ -211,9 +249,5 @@ After filling in each document:
 Once you've entered your content:
 
 1. **Tell me you're done** entering data
-2. I'll update the **Projects page** (`/projects`) to fetch from Sanity instead of hardcoded samples
-3. I'll update the **Skills page** (`/skills`) to fetch from Sanity instead of hardcoded arrays
-4. Your portfolio will be fully dynamic and CMS-driven
-
-> [!IMPORTANT]
-> **Start with Achievements** — that page already fetches from Sanity, so you'll see results immediately and can verify the Studio is working before entering the more complex Project data.
+2. I'll update pages to fetch from Sanity if they aren't fully wired yet!
+3. Your portfolio will be fully dynamic and CMS-driven

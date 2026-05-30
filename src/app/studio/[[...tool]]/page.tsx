@@ -1,11 +1,24 @@
 "use client";
 
-import { NextStudio } from "next-sanity/studio";
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+const NextStudio = dynamic(
+  () => import("next-sanity/studio").then((mod) => mod.NextStudio),
+  { ssr: false }
+);
 import config from "../../../../sanity.config";
 import { AlertTriangle, Terminal, ArrowRight, Settings } from "lucide-react";
 import Link from "next/link";
 
 export default function StudioPage() {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   // Sanity Project IDs can only contain a-z, 0-9 and dashes
   const projectId = config.projectId;
   const isConfigured = Boolean(projectId) && 

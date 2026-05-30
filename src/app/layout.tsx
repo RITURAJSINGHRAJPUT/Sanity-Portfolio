@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,17 +13,6 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
 });
-
-export const heroData = {
-  name: "Rituraj Singh",
-  tagline: "Project Manager · Delivery Architect · Strategy · Agile",
-  roles: [
-    "Project Manager",
-    "Agile Delivery Architect",
-    "Strategic Product Partner",
-    "Systems Thinker",
-  ],
-};
 
 export const metadata: Metadata = {
   title: {
@@ -69,10 +56,8 @@ export default function RootLayout({
           />
         )}
       </head>
-      <body className="min-h-full flex flex-col antialiased">
-        <Navbar />
-        <main className="flex-1 pt-[73px] page-transition">{children}</main>
-        <Footer />
+      <body className="min-h-full flex flex-col antialiased" suppressHydrationWarning>
+        {children}
       </body>
     </html>
   );

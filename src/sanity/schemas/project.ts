@@ -40,6 +40,12 @@ export const project = defineType({
       description: "1–2 sentence project summary shown in the card header",
     }),
     defineField({
+      name: "liveUrl",
+      title: "Live URL",
+      type: "url",
+      description: "URL to the live project",
+    }),
+    defineField({
       name: "tags",
       title: "Tags",
       type: "array",
